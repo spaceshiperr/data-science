@@ -50,3 +50,23 @@ xtable(absence_cor)
 # correlogram 
 library(corrplot)
 corrplot(absence_cor, method="circle", type = "lower")
+
+# two-variable linear regression
+plot(absence$Age ~ absence$Service.time)
+# calc age mean 
+age_mean <- mean(absence$Age, na.rm = T)
+# plot horizontal line at age_mean
+abline(h = age_mean)
+# use lm to fit a regression line through the data
+# regression equation: y = ax + b
+# 1st param: intercept is b
+# 2nd param: it is a
+# here y is Age and x is Service.time
+model1 <- lm(absence$Age ~ absence$Service.time)
+abline(model1, col = "red")
+plot(model1)
+summary(model1)
+
+# multivariate linear regression
+regression_vars <- data.frame(Age = absence$Age, Weight = absence$Weight, Body.mass.index = absence$Body.mass.index, Pet = absence$Pet, Service.time = absence$Service.time)
+model <- lm(regression_vars$Service.time ~ ., data = regression_vars)
