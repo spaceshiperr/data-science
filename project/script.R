@@ -1,13 +1,13 @@
 # reading data
 require("foreign")
 setwd("/home/spaceshiperr/Documents/github/data-science/project/dataset")
-absense <- read.csv("Absenteeism_at_work.csv", header = TRUE,  sep=";")
+absence <- read.csv("Absenteeism_at_work.csv", header = TRUE,  sep=";")
 
 # descriptive statistics
-summary(absense)
+summary(absence)
 
 # groups and percentage
-tbl <- table(absense$Reason.for.absence)
+tbl <- table(absence$Reason.for.absence)
 tbl_p <- cbind(tbl, prop.table(tbl) * 100)
 
 # printing the group tables
@@ -17,12 +17,27 @@ xtable(head(tbl_percent, 14))
 xtable(tail(tbl_percent, 14))
 
 # t-tests for smokers and drinkers
-t.test(absense$Absenteeism.time.in.hours ~ absense$Social.drinker, alternative="two.sided", conf.level = 0.95)
-t.test(absense$Absenteeism.time.in.hours ~ absense$Social.smoker, alternative="two.sided", conf.level = 0.95)
-t.test(absense$Absenteeism.time.in.hours ~ absense$Disciplinary.failure, alternative="two.sided", conf.level = 0.95)
+t.test(absence$Absenteeism.time.in.hours ~ absence$Social.drinker, alternative="two.sided", conf.level = 0.95)
+t.test(absence$Absenteeism.time.in.hours ~ absence$Social.smoker, alternative="two.sided", conf.level = 0.95)
+t.test(absence$Absenteeism.time.in.hours ~ absence$Disciplinary.failure, alternative="two.sided", conf.level = 0.95)
 
 # contingency table and chi-squared test
-chisq.test(table(absense$Reason.for.absence, absense$Day.of.the.week))
-chisq.test(table(absense$Month.of.absence, absense$Day.of.the.week))
-chisq.test(table(absense$Day.of.the.week, absense$Seasons))
-chisq.test(table(absense$Day.of.the.week, absense$Education))
+# not enough evidence to reject H0
+chisq.test(table(absence$Reason.for.absence, absence$Day.of.the.week))
+chisq.test(table(absence$Month.of.absence, absence$Day.of.the.week))
+chisq.test(table(absence$Day.of.the.week, absence$Seasons))
+chisq.test(table(absence$Day.of.the.week, absence$Education))
+# enough evidence to reject H0
+chisq.test(table(absence$Reason.for.absence, absence$Month.of.absence))
+chisq.test(table(absence$Reason.for.absence, absence$Seasons))
+
+# absence_cat <- absence[ , c("Reason.for.absence", "Month.of.absence", "Day.of.the.week", "Seasons", "Education")]
+
+# scatter plots and correlation tests on certain variables
+plot(absence$Height, absence$Absenteeism.time.in.hours)
+cor.test(absence$Height, absence$Absenteeism.time.in.hours)
+cor.test(absence$Son, absence$Absenteeism.time.in.hours)
+
+# correlation table for continuous variables
+absence_num <- absence[ , -which(names(absence) %in% c("ID","Reason.for.absence", "Month.of.absence", "Day.of.the.week", "Seasons", "Disciplinary.failure", "Education", "Social.drinker", "Social.smoker"))]
+cor(absence_num)
