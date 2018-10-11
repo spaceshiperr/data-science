@@ -31,8 +31,6 @@ chisq.test(table(absence$Day.of.the.week, absence$Education))
 chisq.test(table(absence$Reason.for.absence, absence$Month.of.absence))
 chisq.test(table(absence$Reason.for.absence, absence$Seasons))
 
-# absence_cat <- absence[ , c("Reason.for.absence", "Month.of.absence", "Day.of.the.week", "Seasons", "Education")]
-
 # scatter plots and correlation tests on certain variables
 plot(absence$Height, absence$Absenteeism.time.in.hours)
 cor.test(absence$Transportation.expense, absence$Distance.from.Residence.to.Work)
@@ -49,7 +47,7 @@ xtable(absence_cor)
 
 # correlogram 
 library(corrplot)
-corrplot(absence_cor, method="circle", type = "lower")
+corrplot(absence_cor, method="color", type = "lower")
 
 # two-variable linear regression
 plot(absence$Age ~ absence$Service.time)
@@ -70,3 +68,22 @@ summary(model1)
 # multivariate linear regression
 regression_vars <- data.frame(Age = absence$Age, Weight = absence$Weight, Body.mass.index = absence$Body.mass.index, Pet = absence$Pet, Service.time = absence$Service.time)
 model <- lm(regression_vars$Service.time ~ ., data = regression_vars)
+
+# cluster analysis
+k.max <- 15
+# determine the number of clusters from the plot
+wss <- sapply(1:k.max, 
+              function(k){kmeans(log10(absence_num+1), k, nstart=50,iter.max = k.max)$tot.withinss})
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares")
+# let's assume optimal number of clusters from the plot is 5
+cluster.count <- 5
+fit <- kmeans(absence_num, cluster.count)
+
+#plot all clusters
+library(cluster)
+clusplot(absence, fit$cluster, color = TRUE, shade = TRUE, lines = 0, labels = 2)
+# view the clusters for 2 variables
+plot(absence$Absenteeism.time.in.hours ~ absence$Transportation.expense, col = fit$cluster)
