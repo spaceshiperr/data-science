@@ -47,7 +47,7 @@ xtable(absence_cor)
 
 # correlogram 
 library(corrplot)
-corrplot(absence_cor, method="color", type = "lower")
+corrplot(absence_cor, method="color")
 
 # two-variable linear regression
 plot(absence$Age ~ absence$Service.time)
