@@ -16,10 +16,6 @@ data(tbl_p)
 xtable(head(tbl_p, 14))
 xtable(tail(tbl_p, 14))
 
-# t-tests for smokers and drinkers
-t.test(absence$Absenteeism.time.in.hours ~ absence$Social.drinker, alternative="two.sided", conf.level = 0.95)
-t.test(absence$Absenteeism.time.in.hours ~ absence$Social.smoker, alternative="two.sided", conf.level = 0.95)
-t.test(absence$Absenteeism.time.in.hours ~ absence$Disciplinary.failure, alternative="two.sided", conf.level = 0.95)
 
 # contingency table and chi-squared test
 # not enough evidence to reject H0
