@@ -16,17 +16,6 @@ data(tbl_p)
 xtable(head(tbl_p, 14))
 xtable(tail(tbl_p, 14))
 
-
-# contingency table and chi-squared test
-# not enough evidence to reject H0
-chisq.test(table(absence$Reason.for.absence, absence$Day.of.the.week))
-chisq.test(table(absence$Month.of.absence, absence$Day.of.the.week))
-chisq.test(table(absence$Day.of.the.week, absence$Seasons))
-chisq.test(table(absence$Day.of.the.week, absence$Education))
-# enough evidence to reject H0
-chisq.test(table(absence$Reason.for.absence, absence$Month.of.absence))
-chisq.test(table(absence$Reason.for.absence, absence$Seasons))
-
 # scatter plots and correlation tests on certain variables
 plot(absence$Height, absence$Absenteeism.time.in.hours)
 cor.test(absence$Transportation.expense, absence$Distance.from.Residence.to.Work)
