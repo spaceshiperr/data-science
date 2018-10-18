@@ -7,52 +7,51 @@ absence <- read.csv("Absenteeism_at_work.csv", header = TRUE,  sep=";")
 summary(absence)
 
 # groups and percentage
-tbl <- table(absence$Reason.for.absence)
-tbl_p <- cbind(tbl, prop.table(tbl) * 100)
+table <- table(absence$Reason.for.absence)
+table.percent <- cbind(tbl, prop.table(tbl) * 100)
 
 # printing the group tables
 library(xtable)
-data(tbl_p)
-xtable(head(tbl_p, 14))
-xtable(tail(tbl_p, 14))
+data(table.percent)
+xtable(table.percent)
 
 # scatter plots and correlation tests on certain variables
 plot(absence$Height, absence$Absenteeism.time.in.hours)
 cor.test(absence$Transportation.expense, absence$Distance.from.Residence.to.Work)
-cor.test(absence$Son, absence$Absenteeism.time.in.hours)
 
-# correlation table for continuous variables
-absence_num <- absence[ , -which(names(absence) %in% c("ID","Reason.for.absence", "Month.of.absence", "Day.of.the.week", "Seasons", "Disciplinary.failure", "Education", "Social.drinker", "Social.smoker", "Hit.target"))]
-absence_cor <- cor(absence_num)
+# correlation table for numeric variables
+absence.numeric <- absence[ , -which(names(absence) %in% c("ID","Reason.for.absence", "Month.of.absence", "Day.of.the.week", "Seasons", "Disciplinary.failure", "Education", "Social.drinker", "Social.smoker", "Hit.target"))]
+absence.correlation <- cor(absence.numeric)
 
 # printing correlation table
 library(xtable)
-data(absence_cor)
-xtable(absence_cor)
+data(absence.correlation)
+xtable(absence.correlation)
 
 # correlogram 
 library(corrplot)
-corrplot(absence_cor, method="color")
+corrplot(absence.correlation, method="color")
 
 # two-variable linear regression
-plot(absence$Age ~ absence$Service.time)
-# calc age mean 
-age_mean <- mean(absence$Age, na.rm = T)
-# plot horizontal line at age_mean
-abline(h = age_mean)
-# use lm to fit a regression line through the data
-# regression equation: y = ax + b
-# 1st param: intercept is b
-# 2nd param: it is a
-# here y is Age and x is Service.time
-model1 <- lm(absence$Age ~ absence$Service.time)
-abline(model1, col = "red")
-plot(model1)
-summary(model1)
+# plot(absence$Age ~ absence$Service.time)
+# # calc age mean 
+# age_mean <- mean(absence$Age, na.rm = T)
+# # plot horizontal line at age_mean
+# abline(h = age_mean)
+# # use lm to fit a regression line through the data
+# # regression equation: y = ax + b
+# # 1st param: intercept is b
+# # 2nd param: it is a
+# # here y is Age and x is Service.time
+# model1 <- lm(absence$Age ~ absence$Service.time)
+# abline(model1, col = "red")
+# plot(model1)
+# summary(model1)
 
 # multivariate linear regression
-regression_vars <- data.frame(Age = absence$Age, Weight = absence$Weight, Body.mass.index = absence$Body.mass.index, Pet = absence$Pet, Service.time = absence$Service.time)
-model <- lm(regression_vars$Service.time ~ ., data = regression_vars)
+regression.variables <- data.frame(Age = absence$Age, Weight = absence$Weight, Body.mass.index = absence$Body.mass.index, Pet = absence$Pet, Service.time = absence$Service.time)
+model <- lm(regression.variables$Service.time ~ ., data = regression.variables)
+summary(model)
 
 # cluster analysis
 k.max <- 15
