@@ -20,7 +20,7 @@ absence.numeric <- absence[ , -which(names(absence) %in% c("ID","Reason.for.abse
 
 # cluster analysis
 k.max <- 15
-# determine the number of clusters from the plot
+# determine the number of clusters from the scree plot
 wss <- sapply(1:k.max, 
               function(k){kmeans(log10(absence_num+1), k, nstart=50,iter.max = k.max)$tot.withinss})
 plot(1:k.max, wss,
@@ -40,7 +40,6 @@ plot(absence$Absenteeism.time.in.hours ~ absence$Transportation.expense, col = f
 
 
 
-
 # Hierarchical Clustering 
 
 # normalize data so that mean is 0 and std dev is 1
@@ -54,7 +53,7 @@ distance <- dist(absence.normalized)
 
 # cluster dendogram with complete linkage
 hc.c <- hclust(distance)
-plot(hc.c, hange = -1)
+plot(hc.c, hang = -1)
 plot(hc.c)
 # cluster dendogram with average linkage
 hc.a <- hclust(distance, method = "average")
