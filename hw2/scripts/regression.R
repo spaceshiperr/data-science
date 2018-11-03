@@ -1,6 +1,6 @@
 # read data
 require("foreign")
-setwd("/home/spaceshiperr/Documents/github/data-science/hw2")
+setwd("/home/spaceshiperr/Documents/github/data-science/hw2/data")
 ads <- read.csv("Advertising.csv", header = TRUE,  sep=",")
 
 # remove X column since we don't need it here
